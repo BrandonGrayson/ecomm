@@ -1,6 +1,8 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 
 const app = express();
+app.use(bodyParser.urlencoded({ extended: true }))
 
 app.get('/', (req, res) => {
     res.send(`
@@ -11,13 +13,14 @@ app.get('/', (req, res) => {
                 <input name="passwordConfirmation" placeholder="password confirmation" />
                 <button>Sign Up</button>
             </form>
-        </div>
+        </div> 
 
     `);
 });
 
+
 app.post('/', (req,res) => {
-    res.send('Account Created!!!');
+    console.log(req);
 });
 
 app.listen(3000, () => {
