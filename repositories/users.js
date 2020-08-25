@@ -1,5 +1,6 @@
 // Require fs
 const fs = require('fs');
+const crypto = require('crypto');
 
 // create a user Repository
 class usersRepository  {
@@ -26,11 +27,21 @@ class usersRepository  {
 
     // create function 
     async create(attrs) {
+        attrs.id = this.randomId();
         // create a variable that will store the contents of the get all function
         const records = await this.getAll();
         records.push(attrs);
         // write the updated "records" array back to this.filename
+        await this.writeAll(records);        
+    }
+
+    async writeAll(records) {
         await fs.promises.writeFile(this.filename, JSON.stringify(records));
+    }
+
+        // generate random set of data
+    randomId() {
+        return crypto.randomBytes(4).toString('hex');
     }
 }   
 
