@@ -86,15 +86,6 @@ class usersRepository  {
     }
 }   
 
-// Set up an asynchronos test functiion to run repo and create a new users repository
-const test = async () => {
-    const repo = new usersRepository('users.json');
 
-    const user = await repo.getOneBy({
-        id: '2fa5234342ab88'
-    });
+module.exports = new usersRepository('users.json');
 
-    console.log(user);
-};
-
-test();
