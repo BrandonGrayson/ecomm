@@ -54,13 +54,47 @@ class usersRepository  {
         const filteredRecords = records.filter(record => record.id !== id);
         await this.writeAll(filteredRecords);
     }
+
+    async update(id, attrs) {
+        const records = await this.getAll();
+        const record = records.find(record => record.id === id);
+
+        if (!record) {
+            throw new Error(`Record with id ${id} not found`);
+        }
+
+        Object.assign(record, attrs);
+        await this.writeAll(records);
+    }
+
+    async getOneBy(filters) {
+        const records = await this.getAll();
+
+        for (let record of records) {
+            let found = true;
+
+            for (let key in filters) {
+                if (record[key] !== filters[key]) {
+                    found = false;
+                }
+            }
+
+            if (found) {
+                return record;
+            }
+        }
+    }
 }   
 
 // Set up an asynchronos test functiion to run repo and create a new users repository
 const test = async () => {
     const repo = new usersRepository('users.json');
 
-    await repo.delete('2067756b');
+    const user = await repo.getOneBy({
+        id: '2fa5234342ab88'
+    });
+
+    console.log(user);
 };
 
 test();
