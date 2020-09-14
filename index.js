@@ -9,7 +9,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieSession({
     keys: ['jkdjkdgjfagfdsfjkd2kj343k43j3u']
-}))
+}));
 
 app.get('/signup', (req, res) => {
     res.send(`
@@ -59,7 +59,7 @@ app.get('/signin', (req, res) => {
      <form method="POST">
          <input name="email" placeholder="email" />
          <input name="password" placeholder="password" />
-         <button>Sign Up</button>
+         <button>Sign In6</button>
      </form>
  </div> 
     `);
@@ -74,7 +74,12 @@ app.post('/signin', async (req, res) => {
         return res.send ('Email not found');
     }
 
-    if (user.password !== password) {
+    const validPassword = await usersRepo.comparePasswords(
+        user.password,
+        password
+    );
+
+    if (!validPassword) {
         return res.send('Invalid Passoword');
     }
 
